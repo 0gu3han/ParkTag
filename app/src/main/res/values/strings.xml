@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">ParkTag</string>
+    <string name="tagline">Tag your spot. Find your car.</string>
+    <string name="btn_save_parking">Save Parking Location</string>
+    <string name="btn_view_map">View on Map</string>
+    <string name="btn_history">Parking History</string>
+    <string name="btn_clear">Clear</string>
+    <string name="btn_back">Back</string>
+    <string name="label_no_parking">No parking location saved yet.</string>
+    <string name="label_saved_at">Saved at: %s</string>
+    <string name="label_notes">Notes: %s</string>
+    <string name="label_no_notes">No notes</string>
+    <string name="label_level">Level: %s</string>
+    <string name="label_section">Section: %s</string>
+    <string name="hint_notes">Add notes (optional)</string>
+    <string name="hint_level">Level (e.g. 3)</string>
+    <string name="hint_section">Section (e.g. B)</string>
+    <string name="title_history">Parking History</string>
+    <string name="title_map">Find My Car</string>
+    <string name="label_empty_history">No parking history yet.</string>
+    <string name="confirm_clear">Are you sure you want to clear the saved location?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
