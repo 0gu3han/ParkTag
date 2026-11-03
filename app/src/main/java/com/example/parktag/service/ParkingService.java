@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 -ff package com.example.parktag.service;
+=======
+package com.example.parktag.service;
+>>>>>>> origin/feature/data-layer
 
 import com.example.parktag.data.ParkingRepository;
 import com.example.parktag.model.ParkingSession;
@@ -13,7 +17,11 @@ public class ParkingService {
         this.repository = repository;
     }
 
+<<<<<<< HEAD
     public long saveSession(ParkingSession session) {
+=======
+    public void saveSession(ParkingSession session, ParkingRepository.Callback<Long> callback) {
+>>>>>>> origin/feature/data-layer
         validateSession(session);
 
         if (session.getId() != 0) {
@@ -21,6 +29,7 @@ public class ParkingService {
         }
 
         long now = System.currentTimeMillis();
+<<<<<<< HEAD
 
         session.setCreatedAt(now);
         session.setUpdatedAt(now);
@@ -29,15 +38,53 @@ public class ParkingService {
     }
 
     public ParkingSession getSession(long id) {
+=======
+        session.setCreatedAt(now);
+        session.setUpdatedAt(now);
+
+        repository.save(session, callback);
+    }
+
+    public void getSession(long id, ParkingRepository.Callback<ParkingSession> callback) {
+>>>>>>> origin/feature/data-layer
         if (id <= 0) {
             throw new IllegalArgumentException("Session ID must be positive");
         }
 
+<<<<<<< HEAD
         return repository.getById(id);
     }
 
     public List<ParkingSession> getHistory() {
         return repository.getHistory();
+=======
+        repository.getById(id, callback);
+    }
+
+    public void getHistory(ParkingRepository.Callback<List<ParkingSession>> callback) {
+        repository.getHistory(callback);
+    }
+
+    public void closeSession(long id, ParkingRepository.Callback<Boolean> callback) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Session ID must be positive");
+        }
+
+        repository.closeSession(id, callback);
+    }
+
+    public void updateSession(ParkingSession session, ParkingRepository.Callback<Void> callback) {
+        if (session.getId() <= 0) {
+            throw new IllegalArgumentException("Session ID must be positive");
+        }
+
+        String note = session.getNote();
+        if (note != null && note.codePointCount(0, note.length()) > 280) {
+            throw new IllegalArgumentException("Note must be less than 280 characters");
+        }
+
+        repository.update(session, callback);
+>>>>>>> origin/feature/data-layer
     }
 
     private void validateSession(ParkingSession session) {
@@ -80,6 +127,7 @@ public class ParkingService {
             throw new IllegalArgumentException("Reminder scheduling has not been implemented yet");
         }
     }
+<<<<<<< HEAD
 
     public boolean closeSession(long id) {
         if (id <= 0) {
@@ -88,4 +136,6 @@ public class ParkingService {
 
         return repository.closeSession(id, System.currentTimeMillis());
     }
+=======
+>>>>>>> origin/feature/data-layer
 }
