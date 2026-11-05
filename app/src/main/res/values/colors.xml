@@ -2,4 +2,22 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Automotive dark theme -->
+    <color name="bg_primary">#0A0A0A</color>
+    <color name="bg_secondary">#141414</color>
+    <color name="bg_card">#1C1C1C</color>
+
+    <color name="accent_amber">#FFC107</color>
+    <color name="accent_amber_dim">#33FFC107</color>
+
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#888888</color>
+
+    <color name="gear_inactive">#3A3A3A</color>
+    <color name="gear_track">#222222</color>
+
+    <color name="camera_line_close">#FFFF4444</color>
+    <color name="camera_line_mid">#FFFFCC00</color>
+    <color name="camera_line_far">#FF44CC44</color>
 </resources>

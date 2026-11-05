@@ -27,6 +27,7 @@ public class HistoryActivity extends AppCompatActivity {
         RecyclerView rvHistory = findViewById(R.id.rvHistory);
         TextView tvEmpty = findViewById(R.id.tvEmptyHistory);
 
+        findViewById(R.id.btnBackHistory).setOnClickListener(v -> finish());
         rvHistory.setLayoutManager(new LinearLayoutManager(this));
 
         parkingService.getHistory(sessions -> {

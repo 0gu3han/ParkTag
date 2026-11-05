@@ -1,9 +1,13 @@
 package com.example.parktag;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -16,14 +20,32 @@ import com.example.parktag.service.ParkingService;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int GEAR_P = 0;
+    private static final int GEAR_R = 1;
+    private static final int GEAR_N = 2;
+    private static final int GEAR_D = 3;
+
+    private int currentGear = GEAR_D;
+    private boolean selectorInitialized = false;
+
     private ParkingService parkingService;
     private ParkingSession currentSession;
 
+    // Gear views
+    private FrameLayout gearContainer;
+    private View gearSelector;
+    private FrameLayout[] gearViews;
+    private TextView[] gearLabels;
+
+    // Status panel views
+    private TextView tvGearName;
+    private TextView tvGearDesc;
     private TextView tvNoParkingMessage;
     private TextView tvSavedAt;
     private TextView tvLevel;
     private TextView tvSection;
     private TextView tvNotes;
+    private LinearLayout actionButtons;
     private Button btnViewMap;
     private Button btnClear;
 
@@ -37,19 +59,48 @@ public class MainActivity extends AppCompatActivity {
         );
         parkingService = new ParkingService(repository);
 
+        gearContainer = findViewById(R.id.gearContainer);
+        gearSelector = findViewById(R.id.gearSelector);
+
+        gearViews = new FrameLayout[]{
+                findViewById(R.id.gearP),
+                findViewById(R.id.gearR),
+                findViewById(R.id.gearN),
+                findViewById(R.id.gearD)
+        };
+        gearLabels = new TextView[]{
+                findViewById(R.id.labelP),
+                findViewById(R.id.labelR),
+                findViewById(R.id.labelN),
+                findViewById(R.id.labelD)
+        };
+
+        tvGearName = findViewById(R.id.tvGearName);
+        tvGearDesc = findViewById(R.id.tvGearDesc);
         tvNoParkingMessage = findViewById(R.id.tvNoParkingMessage);
         tvSavedAt = findViewById(R.id.tvSavedAt);
         tvLevel = findViewById(R.id.tvLevel);
         tvSection = findViewById(R.id.tvSection);
         tvNotes = findViewById(R.id.tvNotes);
+        actionButtons = findViewById(R.id.actionButtons);
         btnViewMap = findViewById(R.id.btnViewMap);
         btnClear = findViewById(R.id.btnClear);
 
-        findViewById(R.id.btnSaveParking).setOnClickListener(v -> onSaveParkingClicked());
+        for (int i = 0; i < gearViews.length; i++) {
+            final int gear = i;
+            gearViews[i].setOnClickListener(v -> onGearSelected(gear));
+        }
+
         btnViewMap.setOnClickListener(v -> openMap());
         btnClear.setOnClickListener(v -> confirmClear());
         findViewById(R.id.btnHistory).setOnClickListener(v ->
                 startActivity(new Intent(this, HistoryActivity.class)));
+
+        // Position selector at D after first layout pass
+        gearContainer.post(() -> {
+            positionSelectorAt(GEAR_D, false);
+            selectorInitialized = true;
+        });
 
         loadLatestSession();
     }
@@ -57,35 +108,100 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Return to D after coming back from P or R
+        if (currentGear == GEAR_P || currentGear == GEAR_R) {
+            currentGear = GEAR_D;
+            if (selectorInitialized) {
+                positionSelectorAt(GEAR_D, true);
+            }
+            updateGearLabels(GEAR_D);
+        }
         loadLatestSession();
     }
 
-    private void loadLatestSession() {
-        parkingService.getHistory(sessions -> {
-            if (sessions != null && !sessions.isEmpty()) {
-                // Find the latest open session
-                ParkingSession latest = null;
-                for (ParkingSession s : sessions) {
-                    if (s.getClosedAt() == null) {
-                        latest = s;
-                        break;
-                    }
-                }
-                currentSession = latest;
-            } else {
-                currentSession = null;
-            }
-            updateUI();
-        });
+    // ── Gear logic ────────────────────────────────────────────────────────────
+
+    private void onGearSelected(int gear) {
+        if (gear == currentGear) return;
+
+        currentGear = gear;
+        if (selectorInitialized) {
+            positionSelectorAt(gear, true);
+        }
+        updateGearLabels(gear);
+        updateStatusPanel(gear);
+
+        if (gear == GEAR_P) {
+            startActivity(new Intent(this, SaveParkingActivity.class));
+        } else if (gear == GEAR_R) {
+            startActivity(new Intent(this, CameraActivity.class));
+        }
     }
 
-    private void updateUI() {
+    private void positionSelectorAt(int gear, boolean animate) {
+        int containerH = gearContainer.getHeight();
+        if (containerH == 0) return;
+
+        int slotH = containerH / 4;
+        float targetY = gear * slotH + (slotH - gearSelector.getHeight()) / 2f;
+
+        if (animate) {
+            ObjectAnimator anim = ObjectAnimator.ofFloat(
+                    gearSelector, "translationY",
+                    gearSelector.getTranslationY(), targetY);
+            anim.setDuration(300);
+            anim.setInterpolator(new DecelerateInterpolator());
+            anim.start();
+        } else {
+            gearSelector.setTranslationY(targetY);
+        }
+    }
+
+    private void updateGearLabels(int activeGear) {
+        for (int i = 0; i < gearLabels.length; i++) {
+            gearLabels[i].setTextColor(getColor(
+                    i == activeGear ? R.color.accent_amber : R.color.gear_inactive));
+        }
+
+        String[] names = {
+                getString(R.string.gear_name_park),
+                getString(R.string.gear_name_reverse),
+                getString(R.string.gear_name_neutral),
+                getString(R.string.gear_name_drive)
+        };
+        tvGearName.setText(names[activeGear]);
+    }
+
+    // ── Status panel ──────────────────────────────────────────────────────────
+
+    private void updateStatusPanel(int gear) {
+        boolean isDrive = gear == GEAR_D;
+
+        actionButtons.setVisibility(isDrive ? View.VISIBLE : View.GONE);
+        tvNoParkingMessage.setVisibility(isDrive ? View.VISIBLE : View.GONE);
+        tvSavedAt.setVisibility(View.GONE);
+        tvLevel.setVisibility(View.GONE);
+        tvSection.setVisibility(View.GONE);
+        tvNotes.setVisibility(View.GONE);
+
+        String[] descs = {
+                getString(R.string.gear_desc_park),
+                getString(R.string.gear_desc_reverse),
+                getString(R.string.gear_desc_neutral),
+                currentSession != null
+                        ? getString(R.string.gear_desc_drive_saved)
+                        : getString(R.string.gear_desc_drive_empty)
+        };
+        tvGearDesc.setText(descs[gear]);
+
+        if (isDrive) {
+            refreshSessionViews();
+        }
+    }
+
+    private void refreshSessionViews() {
         if (currentSession == null) {
             tvNoParkingMessage.setVisibility(View.VISIBLE);
-            tvSavedAt.setVisibility(View.GONE);
-            tvLevel.setVisibility(View.GONE);
-            tvSection.setVisibility(View.GONE);
-            tvNotes.setVisibility(View.GONE);
             btnViewMap.setEnabled(false);
             btnClear.setEnabled(false);
         } else {
@@ -106,19 +222,33 @@ public class MainActivity extends AppCompatActivity {
             }
 
             String note = currentSession.getNote();
-            tvNotes.setText(getString(R.string.label_notes,
-                    (note != null && !note.isEmpty()) ? note : getString(R.string.label_no_notes)));
-            tvNotes.setVisibility(View.VISIBLE);
+            if (note != null && !note.isEmpty()) {
+                tvNotes.setText(getString(R.string.label_notes, note));
+                tvNotes.setVisibility(View.VISIBLE);
+            }
 
             btnViewMap.setEnabled(true);
             btnClear.setEnabled(true);
         }
     }
 
-    private void onSaveParkingClicked() {
-        // Will's GPS component will provide coordinates here.
-        // For now, launch SaveParkingActivity where user can enter notes/level/section.
-        startActivity(new Intent(this, SaveParkingActivity.class));
+    // ── Data ──────────────────────────────────────────────────────────────────
+
+    private void loadLatestSession() {
+        parkingService.getHistory(sessions -> {
+            currentSession = null;
+            if (sessions != null) {
+                for (ParkingSession s : sessions) {
+                    if (s.getClosedAt() == null) {
+                        currentSession = s;
+                        break;
+                    }
+                }
+            }
+            if (currentGear == GEAR_D) {
+                updateStatusPanel(GEAR_D);
+            }
+        });
     }
 
     private void openMap() {
@@ -132,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
     private void confirmClear() {
         new AlertDialog.Builder(this)
                 .setMessage(R.string.confirm_clear)
-                .setPositiveButton(R.string.yes, (dialog, which) -> clearCurrentSession())
+                .setPositiveButton(R.string.yes, (d, w) -> clearCurrentSession())
                 .setNegativeButton(R.string.no, null)
                 .show();
     }
@@ -141,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
         if (currentSession != null) {
             parkingService.closeSession(currentSession.getId(), success -> {
                 currentSession = null;
-                updateUI();
+                updateStatusPanel(GEAR_D);
             });
         }
     }

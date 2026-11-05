@@ -18,7 +18,18 @@
     <string name="title_history">Parking History</string>
     <string name="title_map">Find My Car</string>
     <string name="label_empty_history">No parking history yet.</string>
-    <string name="confirm_clear">Are you sure you want to clear the saved location?</string>
+    <string name="confirm_clear">Clear the saved parking spot?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+
+    <!-- Gear UI -->
+    <string name="gear_name_park">PARK</string>
+    <string name="gear_name_reverse">REVERSE</string>
+    <string name="gear_name_neutral">NEUTRAL</string>
+    <string name="gear_name_drive">DRIVE</string>
+    <string name="gear_desc_park">Tag your current spot</string>
+    <string name="gear_desc_reverse">Rear camera parking assist</string>
+    <string name="gear_desc_neutral">—</string>
+    <string name="gear_desc_drive_empty">Shift to P to save your spot</string>
+    <string name="gear_desc_drive_saved">Your car is parked here</string>
 </resources>

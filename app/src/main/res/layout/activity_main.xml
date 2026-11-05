@@ -1,49 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center_horizontal">
+    android:background="@color/bg_primary">
 
-    <!-- App Title -->
+    <!-- History icon: top right -->
     <TextView
+        android:id="@+id/btnHistory"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="&#9776;"
+        android:textColor="@color/text_secondary"
+        android:textSize="20sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_margin="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- App name -->
+    <TextView
+        android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="32sp"
+        android:text="PARKTAG"
+        android:textColor="@color/accent_amber"
+        android:textSize="30sp"
         android:textStyle="bold"
-        android:layout_marginTop="32dp" />
+        android:letterSpacing="0.3"
+        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
+        android:id="@+id/tvTagline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tagline"
-        android:textSize="14sp"
-        android:layout_marginBottom="32dp" />
+        android:text="TAG YOUR SPOT  ·  FIND YOUR CAR"
+        android:textColor="@color/text_secondary"
+        android:textSize="10sp"
+        android:letterSpacing="0.15"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/tvAppName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Saved Location Card -->
+    <!-- Gear Shifter Container -->
+    <FrameLayout
+        android:id="@+id/gearContainer"
+        android:layout_width="200dp"
+        android:layout_height="360dp"
+        android:background="@drawable/gear_container_bg"
+        app:layout_constraintTop_toBottomOf="@id/tvTagline"
+        app:layout_constraintBottom_toTopOf="@id/statusCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.45">
+
+        <!-- Track line -->
+        <View
+            android:id="@+id/gearTrack"
+            android:layout_width="2dp"
+            android:layout_height="252dp"
+            android:layout_gravity="center"
+            android:background="@color/gear_track" />
+
+        <!-- Animated selector glow (positioned programmatically) -->
+        <View
+            android:id="@+id/gearSelector"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:layout_gravity="center_horizontal|top"
+            android:background="@drawable/gear_selector_bg" />
+
+        <!-- Gear items: 4 equal-weight slots -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/gearP"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:id="@+id/labelP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="P"
+                    android:textColor="@color/gear_inactive"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/gearR"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:id="@+id/labelR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="R"
+                    android:textColor="@color/gear_inactive"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/gearN"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:id="@+id/labelN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="N"
+                    android:textColor="@color/gear_inactive"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/gearD"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:id="@+id/labelD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="D"
+                    android:textColor="@color/accent_amber"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Status card -->
     <LinearLayout
-        android:id="@+id/cardSavedLocation"
-        android:layout_width="match_parent"
+        android:id="@+id/statusCard"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@drawable/card_background"
-        android:layout_marginBottom="24dp">
+        android:background="@drawable/status_card_bg"
+        android:padding="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gearContainer">
 
+        <TextView
+            android:id="@+id/tvGearName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DRIVE"
+            android:textColor="@color/accent_amber"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.2" />
+
+        <TextView
+            android:id="@+id/tvGearDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Session info (shown in D gear) -->
         <TextView
             android:id="@+id/tvNoParkingMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_no_parking"
-            android:textSize="16sp" />
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvSavedAt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
             android:textSize="14sp"
             android:visibility="gone" />
 
@@ -51,6 +215,7 @@
             android:id="@+id/tvLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
             android:textSize="14sp"
             android:visibility="gone" />
 
@@ -58,6 +223,7 @@
             android:id="@+id/tvSection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
             android:textSize="14sp"
             android:visibility="gone" />
 
@@ -65,42 +231,47 @@
             android:id="@+id/tvNotes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
             android:visibility="gone" />
+
+        <!-- Map + Clear buttons (D gear only) -->
+        <LinearLayout
+            android:id="@+id/actionButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btnViewMap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/btn_view_map"
+                android:layout_marginEnd="8dp"
+                android:enabled="false" />
+
+            <Button
+                android:id="@+id/btnClear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/btn_clear"
+                android:enabled="false" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <!-- Save Parking Button -->
+    <!-- Hidden: keeps existing Java API intact -->
     <Button
         android:id="@+id/btnSaveParking"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_save_parking"
-        android:layout_marginBottom="12dp" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- View on Map Button -->
-    <Button
-        android:id="@+id/btnViewMap"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_view_map"
-        android:layout_marginBottom="12dp"
-        android:enabled="false" />
-
-    <!-- Clear Button -->
-    <Button
-        android:id="@+id/btnClear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_clear"
-        android:layout_marginBottom="12dp"
-        android:enabled="false" />
-
-    <!-- History Button -->
-    <Button
-        android:id="@+id/btnHistory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_history" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
