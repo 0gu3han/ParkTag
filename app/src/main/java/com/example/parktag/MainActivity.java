@@ -3,10 +3,12 @@ package com.example.parktag;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,8 @@ import com.example.parktag.model.ParkingSession;
 import com.example.parktag.service.ParkingService;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "ParkTag";
 
     private static final int GEAR_P = 0;
     private static final int GEAR_R = 1;
@@ -106,8 +110,9 @@ public class MainActivity extends AppCompatActivity {
         currentGear = gear;
 
         if (gear == GEAR_P) {
+            // Pick the location first; LocationPickerActivity then opens the save form
             gearShifter.postDelayed(() ->
-                    startActivity(new Intent(this, SaveParkingActivity.class)), SHIFT_DELAY_MS);
+                    startActivity(new Intent(this, LocationPickerActivity.class)), SHIFT_DELAY_MS);
         } else if (gear == GEAR_R) {
             gearShifter.postDelayed(() ->
                     startActivity(new Intent(this, CameraActivity.class)), SHIFT_DELAY_MS);
@@ -162,7 +167,17 @@ public class MainActivity extends AppCompatActivity {
     // ── Data ──────────────────────────────────────────────────────────────────
 
     private void loadLatestSession() {
-        parkingService.getHistory(sessions -> {
+        parkingService.getHistory((sessions, error) -> {
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+
+            if (error != null) {
+                Log.e(TAG, "Failed to load parking session", error);
+                Toast.makeText(this, R.string.error_load_session, Toast.LENGTH_LONG).show();
+                return;
+            }
+
             currentSession = null;
             if (sessions != null) {
                 for (ParkingSession s : sessions) {
@@ -194,11 +209,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void clearCurrentSession() {
-        if (currentSession != null) {
-            parkingService.closeSession(currentSession.getId(), success -> {
-                currentSession = null;
-                refreshSessionViews();
-            });
+        if (currentSession == null) {
+            return;
         }
+
+        parkingService.closeSession(currentSession.getId(), (success, error) -> {
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+
+            if (error != null) {
+                Log.e(TAG, "Failed to close parking session", error);
+                Toast.makeText(this, R.string.error_close_session, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (!Boolean.TRUE.equals(success)) {
+                Toast.makeText(this, R.string.error_session_already_closed, Toast.LENGTH_LONG).show();
+                loadLatestSession();
+                return;
+            }
+
+            currentSession = null;
+            refreshSessionViews();
+        });
     }
 }

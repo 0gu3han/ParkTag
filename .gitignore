@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Android Studio files inside the app module (user-specific, cause merge conflicts)
+/app/.idea/

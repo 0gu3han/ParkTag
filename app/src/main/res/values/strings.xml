@@ -29,6 +29,41 @@
     <string name="yes">End</string>
     <string name="no">Cancel</string>
     <string name="toast_saved">Parking spot saved</string>
+    <string name="label_location_accuracy">Captured within about %d m.</string>
+    <string name="label_location_manual">Pinned on the map by you.</string>
+
+    <!-- Errors -->
+    <string name="error_load_session">Could not load your parking location. Please try again.</string>
+    <string name="error_load_history">Could not load parking history</string>
+    <string name="error_load_history_hint">Please reopen this screen to retry.</string>
+    <string name="error_save_session">Could not save your parking location. Please try again.</string>
+    <string name="error_close_session">Could not end your parking session. Please try again.</string>
+    <string name="error_session_already_closed">This parking session is already ended or unavailable.</string>
+    <string name="error_choose_location_first">Choose a parking location before saving.</string>
+
+    <!-- Location picker -->
+    <string name="title_location_picker">Where did you park?</string>
+    <string name="btn_current_location">Locate me</string>
+    <string name="btn_use_location">Use this spot</string>
+    <string name="picker_intro">Use your current location, or zoom in and long-press the map to choose your parking spot.</string>
+    <string name="picker_permission_denied">Location permission was not granted. Zoom in and long-press the map to choose your parking spot.</string>
+    <string name="picker_map_unavailable">The map could not be opened.</string>
+    <string name="picker_rationale_title">Find your parking location</string>
+    <string name="picker_rationale_body">ParkTag uses your location to suggest a parking spot. You can also choose a spot on the map without granting permission.</string>
+    <string name="picker_rationale_continue">Continue</string>
+    <string name="picker_rationale_manual">Choose on map</string>
+    <string name="picker_long_press">Zoom in and long-press your parking spot.</string>
+    <string name="picker_unavailable">Location access is unavailable. Long-press the map to choose a spot.</string>
+    <string name="picker_finding">Finding your location… You can also long-press the map.</string>
+    <string name="picker_not_found">Could not find your location. Check that device location is enabled, retry, or choose a spot on the map.</string>
+    <string name="picker_approximate">Only an approximate location is available. Zoom in and long-press your exact parking spot.</string>
+    <string name="picker_failed">Could not find your location. Retry or long-press the map to choose a spot.</string>
+    <string name="picker_permission_changed">Location permission changed. Retry or choose a spot on the map.</string>
+    <string name="picker_manual_selected">Manual parking spot selected. Long-press again to adjust it.</string>
+    <string name="picker_selected_accuracy">Location selected, accurate to about %1$.0f m. Long-press the map to adjust the spot.</string>
+    <string name="picker_selected_no_accuracy">Location selected; accuracy is unavailable. Check the marker or long-press to adjust it.</string>
+    <string name="picker_stopped">Location lookup stopped. Tap Locate me to retry, or choose a spot on the map.</string>
+    <string name="picker_marker_title">Parking location</string>
 
     <!-- Status pills -->
     <string name="status_parked">PARKED</string>

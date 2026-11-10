@@ -1,7 +1,9 @@
 package com.example.parktag;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,13 +30,30 @@ public class HistoryActivity extends AppCompatActivity {
 
         RecyclerView rvHistory = findViewById(R.id.rvHistory);
         View emptyState = findViewById(R.id.emptyHistory);
+        TextView tvEmptyTitle = findViewById(R.id.tvEmptyHistory);
+        TextView tvEmptyHint = findViewById(R.id.tvEmptyHistoryHint);
 
         MaterialToolbar toolbar = findViewById(R.id.toolbarHistory);
         toolbar.setNavigationOnClickListener(v -> finish());
         rvHistory.setLayoutManager(new LinearLayoutManager(this));
 
-        parkingService.getHistory(sessions -> {
+        parkingService.getHistory((sessions, error) -> {
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+
+            if (error != null) {
+                Log.e("ParkTag", "Failed to load parking history", error);
+                tvEmptyTitle.setText(R.string.error_load_history);
+                tvEmptyHint.setText(R.string.error_load_history_hint);
+                emptyState.setVisibility(View.VISIBLE);
+                rvHistory.setVisibility(View.GONE);
+                return;
+            }
+
             if (sessions == null || sessions.isEmpty()) {
+                tvEmptyTitle.setText(R.string.label_empty_history);
+                tvEmptyHint.setText(R.string.label_empty_history_hint);
                 emptyState.setVisibility(View.VISIBLE);
                 rvHistory.setVisibility(View.GONE);
             } else {
