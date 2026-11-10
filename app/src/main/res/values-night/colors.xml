@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brand_primary">#8AB0FF</color>
+    <color name="brand_on_primary">#0B1E4F</color>
+    <color name="brand_primary_container">#1E3A8A</color>
+    <color name="brand_on_primary_container">#DCE6FF</color>
+
+    <color name="bg_app">#0E1116</color>
+    <color name="bg_surface">#171B22</color>
+    <color name="bg_surface_variant">#232934</color>
+    <color name="text_primary">#E8EBF0</color>
+    <color name="text_secondary">#9AA3B2</color>
+    <color name="outline">#2E3542</color>
+
+    <color name="status_parked">#4ADE80</color>
+    <color name="status_parked_container">#14361F</color>
+    <color name="status_error">#F87171</color>
+</resources>

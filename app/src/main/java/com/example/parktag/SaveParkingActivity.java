@@ -5,7 +5,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.appbar.MaterialToolbar;
 
 import com.example.parktag.data.ParkingDatabase;
 import com.example.parktag.data.ParkingRepository;
@@ -22,6 +25,7 @@ public class SaveParkingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_save_parking);
 
         ParkingRepository repository = new ParkingRepository(
@@ -32,6 +36,9 @@ public class SaveParkingActivity extends AppCompatActivity {
         etLevel = findViewById(R.id.etLevel);
         etSection = findViewById(R.id.etSection);
         etNotes = findViewById(R.id.etNotes);
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbarSave);
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         findViewById(R.id.btnConfirmSave).setOnClickListener(v -> saveParking());
     }
@@ -53,7 +60,7 @@ public class SaveParkingActivity extends AppCompatActivity {
 
         try {
             parkingService.saveSession(session, id -> {
-                Toast.makeText(this, "Parking location saved!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.toast_saved, Toast.LENGTH_SHORT).show();
                 finish();
             });
         } catch (IllegalArgumentException e) {

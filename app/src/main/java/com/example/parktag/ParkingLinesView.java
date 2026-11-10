@@ -6,6 +6,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 
 /**
@@ -17,6 +18,7 @@ public class ParkingLinesView extends View {
 
     private final Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private float density;
 
     public ParkingLinesView(Context context) {
         super(context);
@@ -29,12 +31,17 @@ public class ParkingLinesView extends View {
     }
 
     private void init() {
+        density = getResources().getDisplayMetrics().density;
+
         linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setStrokeWidth(3f);
+        linePaint.setStrokeCap(Paint.Cap.ROUND);
 
         textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setTextSize(36f);
+        textPaint.setTextSize(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP, 12f, getResources().getDisplayMetrics()));
         textPaint.setFakeBoldText(true);
+        textPaint.setLetterSpacing(0.08f);
+        textPaint.setShadowLayer(4f * density, 0f, 0f, 0x99000000);
     }
 
     @Override
@@ -56,7 +63,7 @@ public class ParkingLinesView extends View {
         // Draw left and right boundary lines
         linePaint.setColor(0xCCFFFFFF);
         linePaint.setPathEffect(null);
-        linePaint.setStrokeWidth(4f);
+        linePaint.setStrokeWidth(2.5f * density);
         canvas.drawLine(vpX, vpY, leftBottom,  h, linePaint);
         canvas.drawLine(vpX, vpY, rightBottom, h, linePaint);
 
@@ -74,25 +81,23 @@ public class ParkingLinesView extends View {
             float rx = vpX + (rightBottom - vpX) * t;
 
             linePaint.setColor(colors[i]);
-            linePaint.setStrokeWidth(i == 0 ? 4f : 3f);
-            linePaint.setPathEffect(i == 0 ? null : new DashPathEffect(new float[]{20f, 12f}, 0f));
+            linePaint.setStrokeWidth((i == 0 ? 2.5f : 2f) * density);
+            linePaint.setPathEffect(i == 0 ? null : new DashPathEffect(new float[]{8f * density, 5f * density}, 0f));
 
             canvas.drawLine(lx, y, rx, y, linePaint);
 
             // Label
             textPaint.setColor(colors[i]);
-            textPaint.setTextSize(28f);
-            float textW = textPaint.measureText(labels[i]);
-            canvas.drawText(labels[i], rx + 16f, y + 10f, textPaint);
+            canvas.drawText(labels[i], rx + 8f * density, y + textPaint.getTextSize() / 3f, textPaint);
         }
 
         // Arc near bottom suggesting bumper proximity
         linePaint.setColor(0xCCFF4444);
-        linePaint.setStrokeWidth(3f);
-        linePaint.setPathEffect(new DashPathEffect(new float[]{12f, 8f}, 0f));
+        linePaint.setStrokeWidth(2f * density);
+        linePaint.setPathEffect(new DashPathEffect(new float[]{5f * density, 3f * density}, 0f));
         Path arc = new Path();
-        arc.moveTo(leftBottom, h - 30f);
-        arc.quadTo(vpX, h - 80f, rightBottom, h - 30f);
+        arc.moveTo(leftBottom, h - 12f * density);
+        arc.quadTo(vpX, h - 32f * density, rightBottom, h - 12f * density);
         canvas.drawPath(arc, linePaint);
     }
 }

@@ -1,3 +1,4 @@
 <resources>
-    <!-- Intentionally empty: app always uses dark theme defined in values/themes.xml -->
+    <!-- Intentionally empty: the DayNight theme in values/themes.xml switches
+         automatically, and dark colors come from values-night/colors.xml -->
 </resources>
