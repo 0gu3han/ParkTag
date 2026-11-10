@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
     private void onSaveParkingClicked() {
         // Will's GPS component will provide coordinates here.
         // For now, launch SaveParkingActivity where user can enter notes/level/section.
-        startActivity(new Intent(this, SaveParkingActivity.class));
+        startActivity(new Intent(this, LocationPickerActivity.class));
     }
 
     private void openMap() {

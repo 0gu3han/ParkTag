@@ -24,6 +24,22 @@ public class SaveParkingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save_parking);
 
+        if (!getIntent().hasExtra(LocationPickerActivity.EXTRA_LATITUDE)
+                ||
+        !getIntent().hasExtra(LocationPickerActivity.EXTRA_LONGITUDE)
+                ||
+        !getIntent().hasExtra(LocationPickerActivity.EXTRA_CAPTURED_AT)) {
+
+            Toast.makeText(
+                    this,
+                    "Choose a parking location before saving.",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            finish();
+            return;
+        }
+
         ParkingRepository repository = new ParkingRepository(
                 ParkingDatabase.getInstance(this).parkingSessionDao()
         );
@@ -39,13 +55,34 @@ public class SaveParkingActivity extends AppCompatActivity {
     private void saveParking() {
         // Coordinates will come from Will's GPS component.
         // Placeholder values used until GPS integration is complete.
-        double latitude = 0.0;
-        double longitude = 0.0;
-        long capturedAt = System.currentTimeMillis();
+        double latitude = getIntent().getDoubleExtra(
+                LocationPickerActivity.EXTRA_LATITUDE,
+                Double.NaN
+        );
+
+        double longitude = getIntent().getDoubleExtra(
+                LocationPickerActivity.EXTRA_LONGITUDE,
+                Double.NaN
+        );
+
+        long capturedAt = getIntent().getLongExtra(
+                LocationPickerActivity.EXTRA_CAPTURED_AT,
+                0L
+        );
+
+        Float accuracyMeters = null;
+
+        if (getIntent().hasExtra(LocationPickerActivity.EXTRA_ACCURACY)) {
+            accuracyMeters = getIntent().getFloatExtra(
+                    LocationPickerActivity.EXTRA_ACCURACY,
+                    Float.NaN
+            );
+        }
 
         ParkingSession session = new ParkingSession();
         session.setLatitude(latitude);
         session.setLongitude(longitude);
+        session.setAccuracyMeters(accuracyMeters);
         session.setCapturedAt(capturedAt);
         session.setLevel(etLevel.getText().toString().trim());
         session.setSection(etSection.getText().toString().trim());
