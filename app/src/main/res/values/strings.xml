@@ -21,4 +21,8 @@
     <string name="confirm_clear">Are you sure you want to clear the saved location?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="saved_map_marker">Your parked car</string>
+    <string name="saved_map_unavailable">The map could not be opened.</string>
+    <string name="saved_map_record_missing">This parking record is unavailable.</string>
+    <string name="saved_map_load_failed">Could not load your parking location. Please try again.</string>
 </resources>

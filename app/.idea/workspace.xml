@@ -10,6 +10,11 @@
           <theme>@style/Theme.ParkTag</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/src/main/res/layout/activity_map.xml">
+        <config>
+          <theme>@style/Theme.ParkTag</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
@@ -17,15 +22,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c3434e43-2634-49cf-8996-7731b142ca20" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/parktag/LocationPickerActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/res/layout/activity_location_picker.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/deviceHardwareInput.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deviceHardwareInput.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/parktag/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/parktag/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/parktag/SaveParkingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/parktag/SaveParkingActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/parktag/MapActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/parktag/MapActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_map.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +69,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6,
