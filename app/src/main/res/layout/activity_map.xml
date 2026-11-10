@@ -13,6 +13,26 @@
         android:textStyle="bold"
         android:padding="16dp" />
 
+    <TextView
+        android:id="@+id/tvDistanceToCar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:text="@string/find_car_hint"
+        android:accessibilityLiveRegion="polite" />
+
+    <Button
+        android:id="@+id/btnRefreshMyLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:enabled="false"
+        android:text="@string/find_car_refresh" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/savedParkingMap"
         android:name="com.google.android.gms.maps.SupportMapFragment"

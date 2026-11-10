@@ -23,7 +23,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c3434e43-2634-49cf-8996-7731b142ca20" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/deviceHardwareInput.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deviceHardwareInput.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/parktag/MapActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/parktag/MapActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_map.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/strings.xml" afterDir="false" />

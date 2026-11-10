@@ -25,4 +25,18 @@
     <string name="saved_map_unavailable">The map could not be opened.</string>
     <string name="saved_map_record_missing">This parking record is unavailable.</string>
     <string name="saved_map_load_failed">Could not load your parking location. Please try again.</string>
+    <string name="find_car_refresh">Refresh my location</string>
+    <string name="find_car_hint">Tap Refresh my location to estimate your distance to the car.</string>
+    <string name="find_car_loading">Finding your location…</string>
+    <string name="find_car_permission_denied">Location permission is unavailable. You can enable it in Android Settings. Your saved car location is still shown.</string>
+    <string name="find_car_no_location">Could not find your location. Check that device location is enabled, then retry.</string>
+    <string name="find_car_location_failed">Location lookup failed. Please try again.</string>
+    <string name="find_car_your_location">Your current location</string>
+    <string name="find_car_approximate_location">Your approximate location</string>
+    <string name="find_car_distance">Estimated straight-line distance: %1$.0f metres.</string>
+    <string name="find_car_distance_approximate">Approximate straight-line distance: %1$.0f metres. Approximate location may be too imprecise to find your car.</string>
+    <string name="find_car_permission_title">Find your position</string>
+    <string name="find_car_permission_explanation">ParkTag uses your current location to estimate your distance to the saved parking spot.</string>
+    <string name="find_car_continue">Continue</string>
+    <string name="find_car_cancel">Cancel</string>
 </resources>
