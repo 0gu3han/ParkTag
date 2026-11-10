@@ -52,12 +52,41 @@ public class SaveParkingActivity extends AppCompatActivity {
         session.setNote(etNotes.getText().toString().trim());
 
         try {
-            parkingService.saveSession(session, id -> {
-                Toast.makeText(this, "Parking location saved!", Toast.LENGTH_SHORT).show();
+            parkingService.saveSession(session, (id, error) -> {
+                if (isFinishing() || isDestroyed()) {
+                    return;
+                }
+
+                if (error != null) {
+                    android.util.Log.e(
+                            "ParkTag",
+                            "Failed to save parking session",
+                            error
+                    );
+
+                    Toast.makeText(
+                            this,
+                            "Could not save your parking location. Please try again.",
+                            Toast.LENGTH_LONG
+                    ).show();
+
+                    return;
+                }
+
+                Toast.makeText(
+                        this,
+                        "Parking location saved!",
+                        Toast.LENGTH_SHORT
+                ).show();
+
                 finish();
             });
-        } catch (IllegalArgumentException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (IllegalArgumentException error) {
+            Toast.makeText(
+                    this,
+                    error.getMessage(),
+                    Toast.LENGTH_LONG
+            ).show();
         }
     }
 }

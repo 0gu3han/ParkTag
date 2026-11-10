@@ -24,7 +24,13 @@ public class MapActivity extends AppCompatActivity {
 
         long sessionId = getIntent().getLongExtra("session_id", -1);
 
-        if (sessionId == -1) {
+        if (sessionId <= 0) {
+            android.widget.Toast.makeText(
+                    this,
+                    "This parking record is unavailable.",
+                    android.widget.Toast.LENGTH_LONG
+            ).show();
+
             finish();
             return;
         }
@@ -34,10 +40,36 @@ public class MapActivity extends AppCompatActivity {
         );
         ParkingService parkingService = new ParkingService(repository);
 
-        parkingService.getSession(sessionId, session -> {
-            if (session != null) {
-                onSessionLoaded(session);
+        parkingService.getSession(sessionId, (session, error) -> {
+            if (isFinishing() || isDestroyed()) {
+                return;
             }
+
+            if (error != null) {
+                android.util.Log.e("ParkTag", "Failed to load map record", error);
+
+                android.widget.Toast.makeText(
+                        this,
+                        "Could not load your parking location. Please try again.",
+                        android.widget.Toast.LENGTH_LONG
+                ).show();
+
+                finish();
+                return;
+            }
+
+            if (session == null) {
+                android.widget.Toast.makeText(
+                        this,
+                        "This parking record is no longer available.",
+                        android.widget.Toast.LENGTH_LONG
+                ).show();
+
+                finish();
+                return;
+            }
+
+            onSessionLoaded(session);
         });
     }
 

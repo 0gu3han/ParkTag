@@ -61,20 +61,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadLatestSession() {
-        parkingService.getHistory(sessions -> {
-            if (sessions != null && !sessions.isEmpty()) {
-                // Find the latest open session
-                ParkingSession latest = null;
-                for (ParkingSession s : sessions) {
-                    if (s.getClosedAt() == null) {
-                        latest = s;
+        parkingService.getHistory((sessions, error) -> {
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+
+            if (error != null) {
+                android.util.Log.e("ParkTag", "Failed to load parking session", error);
+
+                android.widget.Toast.makeText(
+                        this,
+                        "Could not load your parking location. Please try again.",
+                        android.widget.Toast.LENGTH_LONG
+                ).show();
+
+                return;
+            }
+
+            ParkingSession latest = null;
+
+            if (sessions != null) {
+                for (ParkingSession session : sessions) {
+                    if (session.getClosedAt() == null) {
+                        latest = session;
                         break;
                     }
                 }
-                currentSession = latest;
-            } else {
-                currentSession = null;
             }
+
+            currentSession = latest;
             updateUI();
         });
     }
@@ -138,11 +153,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void clearCurrentSession() {
-        if (currentSession != null) {
-            parkingService.closeSession(currentSession.getId(), success -> {
-                currentSession = null;
-                updateUI();
-            });
+        if (currentSession == null) {
+            return;
         }
+
+        parkingService.closeSession(currentSession.getId(), (success, error) -> {
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+
+            if (error != null) {
+                android.util.Log.e("ParkTag", "Failed to close parking session", error);
+
+                android.widget.Toast.makeText(
+                        this,
+                        "Could not close your parking session. Please try again.",
+                        android.widget.Toast.LENGTH_LONG
+                ).show();
+
+                return;
+            }
+
+            if (!Boolean.TRUE.equals(success)) {
+                android.widget.Toast.makeText(
+                        this,
+                        "This parking session is already closed or unavailable.",
+                        android.widget.Toast.LENGTH_LONG
+                ).show();
+
+                loadLatestSession();
+                return;
+            }
+
+            currentSession = null;
+            updateUI();
+        });
     }
 }

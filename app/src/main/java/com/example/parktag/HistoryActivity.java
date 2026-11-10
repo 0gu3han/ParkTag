@@ -29,8 +29,23 @@ public class HistoryActivity extends AppCompatActivity {
 
         rvHistory.setLayoutManager(new LinearLayoutManager(this));
 
-        parkingService.getHistory(sessions -> {
+        parkingService.getHistory((sessions, error) -> {
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+
+            if (error != null) {
+                android.util.Log.e("ParkTag", "Failed to load parking history", error);
+
+                tvEmpty.setText("Could not load parking history. Please reopen this screen to retry.");
+                tvEmpty.setVisibility(View.VISIBLE);
+                rvHistory.setVisibility(View.GONE);
+
+                return;
+            }
+
             if (sessions == null || sessions.isEmpty()) {
+                tvEmpty.setText("No parking history yet.");
                 tvEmpty.setVisibility(View.VISIBLE);
                 rvHistory.setVisibility(View.GONE);
             } else {

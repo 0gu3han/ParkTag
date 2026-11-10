@@ -1,94 +1,80 @@
 package com.example.parktag.data;
 
-<<<<<<< HEAD
-import com.example.parktag.model.ParkingSession;
-
-import java.util.List;
-=======
 import android.os.Handler;
 import android.os.Looper;
 
 import com.example.parktag.model.ParkingSession;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
->>>>>>> origin/feature/data-layer
 
 public class ParkingRepository {
 
+    private static final ExecutorService DATABASE_EXECUTOR =
+            Executors.newSingleThreadExecutor();
+
     private final ParkingSessionDao dao;
-<<<<<<< HEAD
-
-    public ParkingRepository(ParkingSessionDao dao) {
-        this.dao = dao;
-    }
-
-    public long save(ParkingSession session) {
-        long generatedId = dao.insert(session);
-        session.setId(generatedId);
-        return generatedId;
-    }
-
-    public ParkingSession getById(long id) {
-        return dao.getById(id);
-    }
-
-    public List<ParkingSession> getHistory() {
-        return dao.getNewestFirst();
-    }
-
-    public boolean closeSession(long id, long timeMillis) {
-        return dao.closeSession(id, timeMillis) == 1;
-=======
-    private final ExecutorService executor;
-    private final Handler mainHandler;
+    private final Handler mainHandler =
+            new Handler(Looper.getMainLooper());
 
     public interface Callback<T> {
-        void onResult(T result);
+        void onResult(T result, Exception error);
     }
 
     public ParkingRepository(ParkingSessionDao dao) {
-        this.dao = dao;
-        this.executor = Executors.newSingleThreadExecutor();
-        this.mainHandler = new Handler(Looper.getMainLooper());
+        this.dao = Objects.requireNonNull(dao);
+    }
+
+    private <T> void execute(
+            Callable<T> operation,
+            Callback<T> callback
+    ) {
+        Objects.requireNonNull(callback);
+
+        DATABASE_EXECUTOR.execute(() -> {
+            final T result;
+
+            try {
+                result = operation.call();
+            } catch (Exception error) {
+                mainHandler.post(() ->
+                        callback.onResult(null, error));
+                return;
+            }
+
+            mainHandler.post(() ->
+                    callback.onResult(result, null));
+        });
     }
 
     public void save(ParkingSession session, Callback<Long> callback) {
-        executor.execute(() -> {
+        execute(() -> {
             long generatedId = dao.insert(session);
             session.setId(generatedId);
-            mainHandler.post(() -> callback.onResult(generatedId));
-        });
+            return generatedId;
+        }, callback);
     }
 
     public void getById(long id, Callback<ParkingSession> callback) {
-        executor.execute(() -> {
-            ParkingSession session = dao.getById(id);
-            mainHandler.post(() -> callback.onResult(session));
-        });
+        execute(() -> dao.getById(id), callback);
     }
 
     public void getHistory(Callback<List<ParkingSession>> callback) {
-        executor.execute(() -> {
-            List<ParkingSession> history = dao.getNewestFirst();
-            mainHandler.post(() -> callback.onResult(history));
-        });
+        execute(dao::getNewestFirst, callback);
     }
 
     public void closeSession(long id, Callback<Boolean> callback) {
-        executor.execute(() -> {
-            boolean success = dao.closeSession(id, System.currentTimeMillis()) == 1;
-            mainHandler.post(() -> callback.onResult(success));
-        });
+        execute(() -> dao.closeSession(id, System.currentTimeMillis()) > 0, callback);
     }
 
     public void update(ParkingSession session, Callback<Void> callback) {
-        executor.execute(() -> {
+        execute(() -> {
             session.setUpdatedAt(System.currentTimeMillis());
             dao.update(session);
-            mainHandler.post(() -> callback.onResult(null));
-        });
->>>>>>> origin/feature/data-layer
+            return null;
+        }, callback);
     }
 }
