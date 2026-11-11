@@ -13,7 +13,7 @@ public class ParkingService {
         this.repository = repository;
     }
 
-    public long saveSession(ParkingSession session) {
+    public void saveSession(ParkingSession session, ParkingRepository.Callback<Long> callback) {
         validateSession(session);
 
         if (session.getId() != 0) {
@@ -21,23 +21,43 @@ public class ParkingService {
         }
 
         long now = System.currentTimeMillis();
-
         session.setCreatedAt(now);
         session.setUpdatedAt(now);
 
-        return repository.save(session);
+        repository.save(session, callback);
     }
 
-    public ParkingSession getSession(long id) {
+    public void getSession(long id, ParkingRepository.Callback<ParkingSession> callback) {
         if (id <= 0) {
             throw new IllegalArgumentException("Session ID must be positive");
         }
 
-        return repository.getById(id);
+        repository.getById(id, callback);
     }
 
-    public List<ParkingSession> getHistory() {
-        return repository.getHistory();
+    public void getHistory(ParkingRepository.Callback<List<ParkingSession>> callback) {
+        repository.getHistory(callback);
+    }
+
+    public void closeSession(long id, ParkingRepository.Callback<Boolean> callback) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Session ID must be positive");
+        }
+
+        repository.closeSession(id, callback);
+    }
+
+    public void updateSession(ParkingSession session, ParkingRepository.Callback<Void> callback) {
+        if (session.getId() <= 0) {
+            throw new IllegalArgumentException("Session ID must be positive");
+        }
+
+        String note = session.getNote();
+        if (note != null && note.codePointCount(0, note.length()) > 280) {
+            throw new IllegalArgumentException("Note must be less than 280 characters");
+        }
+
+        repository.update(session, callback);
     }
 
     private void validateSession(ParkingSession session) {
@@ -79,13 +99,5 @@ public class ParkingService {
         if (session.getReminderAt() != null) {
             throw new IllegalArgumentException("Reminder scheduling has not been implemented yet");
         }
-    }
-
-    public boolean closeSession(long id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("Session ID must be positive");
-        }
-
-        return repository.closeSession(id, System.currentTimeMillis());
     }
 }

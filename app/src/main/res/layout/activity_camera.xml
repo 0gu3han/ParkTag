@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <!-- Camera preview (draws behind the system bars) -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/cameraPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Parking lines overlay -->
+    <com.example.parktag.ParkingLinesView
+        android:id="@+id/parkingLines"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Controls, kept clear of the system bars -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <Button
+            android:id="@+id/btnCameraBack"
+            style="@style/Widget.Material3.Button.IconButton.Filled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_margin="12dp"
+            android:contentDescription="@string/btn_back"
+            app:backgroundTint="@color/camera_scrim"
+            app:icon="@drawable/ic_arrow_back"
+            app:iconTint="@color/white" />
+
+        <TextView
+            style="@style/Widget.ParkTag.Pill"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/pill_camera_bg"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="@string/camera_badge"
+            android:textColor="@color/white" />
+    </FrameLayout>
+
+</FrameLayout>

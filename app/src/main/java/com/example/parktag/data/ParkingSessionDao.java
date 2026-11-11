@@ -3,6 +3,7 @@ package com.example.parktag.data;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.parktag.model.ParkingSession;
 
@@ -13,6 +14,9 @@ public interface ParkingSessionDao {
 
     @Insert
     long insert(ParkingSession session);
+
+    @Update
+    void update(ParkingSession session);
 
     @Query("SELECT * FROM parking_session WHERE id = :id")
     ParkingSession getById(long id);
